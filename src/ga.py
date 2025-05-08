@@ -59,7 +59,6 @@ class DeapSeaGa:
         fitnesses = self.toolbox.map(self.toolbox.evaluate, invalid_ind)
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
-        return ind
     
     def crossover(self, offspring):
         # Apply crossover and mutation on the offspring
@@ -138,7 +137,9 @@ class DeapSeaGa:
             
         if hasattr(self, "pool"):
             self.pool.shutdown()
-        print(f"Finished running all {self.NGEN} generations, might not have converged.")
+
+        if self.PATIENCE is None or stagnation_counter <= self.PATIENCE:
+            print(f"Finished running all {self.NGEN} generations, might not have converged.")
 
         # Find and return the fittest individual
         fits = [ind.fitness.values[0] for ind in pop]
